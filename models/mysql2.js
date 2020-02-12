@@ -4,7 +4,9 @@ const db2 = mysql.createConnection({
   host      : '192.169.233.185',
   user      : 'notcsadm_excalib',
   password  : 'DRp@r6iLa0_j',
-  database  : 'notcsadm_nasdngx'
+  database  : 'notcsadm_nasdngx',
+  multipleStatements: true
+
 });
 
 // connect 

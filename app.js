@@ -16,6 +16,8 @@ const tickerRoutes = require('./routes/ticker');
 const liveTradeRoutes = require('./routes/liveTrade');
 const inboxRoutes = require('./routes/inbox');
 const securityRoutes = require('./routes/securities');
+const equityRoutes = require('./routes/equity');
+const brokersRoutes = require('./routes/brokers');
 
 
 
@@ -57,6 +59,9 @@ app.use('/api',tickerRoutes);
 app.use('/api',liveTradeRoutes);
 app.use('/api',inboxRoutes);
 app.use('/api',securityRoutes);
+app.use('/api',equityRoutes);
+app.use('/api',brokersRoutes);
+
 
 
 

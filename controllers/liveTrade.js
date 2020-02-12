@@ -9,8 +9,8 @@ exports.liveTrade = (req, res) => {
     dt.offsetInDays(0);
     var formatted = dt.format('Ymd');
     console.log(formatted);
-    let sql = "SELECT market_report.`Security`  ,COUNT(*) as count ,SUM(`Qty`) totalQty,(`Price`),SUM(`Qty`*`Price`) as value,MAX(`Price`) as highPrice ,MIN(`Price`) as lowPrice,MAX(`Qty`) highestQty,MIN(`Qty`) as lowestQty, security_to_traded.`COL 11` , security_to_traded.`COL 1`, prices.security_code, prices.refprice, prices.closeprice FROM market_report INNER JOIN security_to_traded ON security_to_traded.`COL 11` = market_report.`Security` INNER JOIN prices ON security_to_traded.`COL 1` = prices.security_code WHERE  market_report.`Date`=? GROUP BY market_report.`Security`";
-    let query = db.query(sql, [formatted], (err, results) => {
+    let sql = "SELECT market_report.`Security`  ,COUNT(*) as count ,SUM(`Qty`) as totalQty,(`Price`),SUM(`Qty`*`Price`) as value,MAX(`Price`) as highPrice ,MIN(`Price`) as lowPrice,MAX(`Qty`) highestQty,MIN(`Qty`) as lowestQty, security_to_be_traded.`sec_code` , security_to_be_traded.`sponsoring_firm`,deals.symbol, deals.dealprice as refprice FROM market_report INNER JOIN security_to_be_traded ON security_to_be_traded.`sec_code` = market_report.`Security`  INNER JOIN deals ON security_to_be_traded.`sec_code` = deals.symbol  WHERE  market_report.`Date`=? GROUP BY market_report.`Security`";
+    let query = db2.query(sql, [formatted], (err, results) => {
         if (err || !results) {
             return res.status(400).json({
                 error: 'not found'

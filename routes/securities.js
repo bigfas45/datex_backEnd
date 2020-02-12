@@ -2,7 +2,11 @@ const express = require('express');
 const router = express.Router();
 
 
-const {symbols, securityData, secSymById, secSymByIdMcap, securityMcap, secSymByIdTtrades, totalTrade, secDealsById, totalDeals, performanceStartByDate, performanceStart, performanceEndByDate, performanceEnd} = require('../controllers/securities');
+const {
+    symbols, securityData, secSymById, secSymByIdMcap, securityMcap, secSymByIdTtrades, 
+    totalTrade, secDealsById, totalDeals, performanceStartByDate, 
+    performanceStart, performanceEndByDate, performanceEnd, performanceEndByDateSecurity,
+     performanceStartByDateSecurity, performanceEndSecurity, performanceStartSecurity} = require('../controllers/securities');
 
 router.get('/security/symbol',  symbols);
 router.get('/security/:secId',  securityData);
@@ -14,6 +18,8 @@ router.get('/security/performanceStart/:performanceStartDate',  performanceStart
 
 router.get('/security/performanceEnd/:performanceEndDate',  performanceEnd);
 
+router.get('/security/performanceEndSecurity/:performanceEndDateSecurity/:performanceEndDateSecurity2',  performanceEndSecurity);
+router.get('/security/performanceStartSecurity/:performanceStartDateSecurity',  performanceStartSecurity);
 
 
 
@@ -26,6 +32,12 @@ router.param('secIdTtrades', secSymByIdTtrades);
 router.param('secDealsId', secDealsById);
 router.param('performanceStartDate', performanceStartByDate);
 router.param('performanceEndDate', performanceEndByDate);
+router.param('performanceEndDateSecurity', performanceEndByDateSecurity);
+router.param('performanceEndDateSecurity2', performanceEndByDateSecurity);
+
+router.param('performanceStartDateSecurity', performanceStartByDateSecurity);
+
+
 
 
 module.exports = router;

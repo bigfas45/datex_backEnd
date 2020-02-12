@@ -7,10 +7,19 @@ const datetime = require('node-datetime');
 
 
 exports.ticker = (req, res) => {
+    let number;
     let date2 = new Date().getHours();
-  if (date2 >= 1 && date2 < 16  ) {
+    let weekday = new Date().toLocaleString('en-us', {  weekday: 'long' });
+
+    if (date2 >= 1 && date2 < 16   && weekday == 'Monday') {
+         number = -3;
+    }else{
+        number = -1;
+    }
+
+  if (date2 >= 1 && date2 < 16   && weekday !=='Saturday' && weekday !=='Sunday'  ) {
     var dt = datetime.create();
-    dt.offsetInDays(-1);
+    dt.offsetInDays(number);
     var formatted = dt.format('Y-m-d');
     console.log(formatted)
   }else{

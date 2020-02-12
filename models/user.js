@@ -45,6 +45,10 @@ const userSchema = new mongoose.Schema({
     chn: {
         type: String,
         trim: true,
+    },
+    code: {
+        type: String,
+        trim: true,
     }
 }, {timestamps: true}
 );
