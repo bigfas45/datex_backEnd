@@ -18,6 +18,10 @@ const inboxRoutes = require('./routes/inbox');
 const securityRoutes = require('./routes/securities');
 const equityRoutes = require('./routes/equity');
 const brokersRoutes = require('./routes/brokers');
+const nasdsecurityRoutes = require('./routes/security');
+const annualreportRoutes = require('./routes/annualreport');
+
+
 
 
 
@@ -61,6 +65,10 @@ app.use('/api',inboxRoutes);
 app.use('/api',securityRoutes);
 app.use('/api',equityRoutes);
 app.use('/api',brokersRoutes);
+app.use('/api',nasdsecurityRoutes);
+app.use('/api',annualreportRoutes);
+
+
 
 
 

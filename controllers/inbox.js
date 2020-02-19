@@ -23,7 +23,7 @@ exports.inboxDate = (req, res) => {
 
 
 exports.dateId = (req, res, next, id) => {
-    let sql = "SELECT `Security Name`,`Security`,`Open Price`,`Close Price`,`52 Week High Price`,`52 Week Low Price` FROM `general_market_summary` WHERE `Date`=?";
+    let sql = "SELECT Date, `Security Name` as securityName ,`Security`,`Open Price` as open,`Close Price` as close,`52 Week High Price` I52WH,`52 Week Low Price` as I52WL FROM `general_market_summary` WHERE `Date`=?";
     let query = db.query(sql, [id], (err, results) => {
         if (err || !results) {
             return res.status(400).json({
