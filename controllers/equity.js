@@ -134,4 +134,36 @@ exports.yearSummaryY = (req, res) => {
 
 
 
+exports.corporate_action = (req, res) => {
+   
+    let sql = "SELECT * FROM corporate_actions";
+    let query = db.query(sql, (err, results) => {
+        if (err || !results) {
+            return res.status(400).json({
+                error: 'not found'
+            });
+        }else{
+            return res.json(results)
+        }
+    });
+    
+};
+
+exports.bonds = (req, res) => {
+   
+    let sql = "SELECT * FROM bonds";
+    let query = db.query(sql, (err, results) => {
+        if (err || !results) {
+            return res.status(400).json({
+                error: 'not found'
+            });
+        }else{
+            return res.json(results)
+        }
+    });
+    
+};
+
+
+
 

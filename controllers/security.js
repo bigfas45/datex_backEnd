@@ -18,7 +18,7 @@ exports.create = (req, res) => {
   security.save((err, data) => {
     if (err) {
       return res.status(400).json({
-        error: err
+        err: errorHandler(err)
       });
     }
     res.json({ data });

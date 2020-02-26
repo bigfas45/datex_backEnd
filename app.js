@@ -20,6 +20,7 @@ const equityRoutes = require('./routes/equity');
 const brokersRoutes = require('./routes/brokers');
 const nasdsecurityRoutes = require('./routes/security');
 const annualreportRoutes = require('./routes/annualreport');
+const participantRoutes = require('./routes/participant');
 
 
 
@@ -67,6 +68,8 @@ app.use('/api',equityRoutes);
 app.use('/api',brokersRoutes);
 app.use('/api',nasdsecurityRoutes);
 app.use('/api',annualreportRoutes);
+app.use('/api',participantRoutes);
+
 
 
 

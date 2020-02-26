@@ -16,11 +16,10 @@ exports.reportById = (req, res, next, id) => {
   });
 };
 
-exports.read =(req, res) => {
-  req.annualreport.file = undefined
+exports.read = (req, res) => {
+  req.annualreport.file = undefined;
   return res.json(req.annualreport);
-
-}
+};
 
 exports.create = (req, res) => {
   let form = new formidable.IncomingForm();
@@ -32,7 +31,7 @@ exports.create = (req, res) => {
     // check for all fields
     const { company, year, filename, security, file } = fields;
 
-    if (!company || !year || !filename || !security ) {
+    if (!company || !year || !filename || !security) {
       return res.status(400).json({
         error: " All fields are required "
       });
@@ -55,18 +54,16 @@ exports.create = (req, res) => {
 };
 
 exports.remove = (req, res) => {
-  let annualreport = req.annualreport
+  let annualreport = req.annualreport;
   annualreport.remove((err, deletedReport) => {
     if (err) {
       return res.status(400).json({ error: errorHandler(err) });
     }
     res.json({
-    
-      "message": 'Report deleted succesfully'
-    })
-  })
+      message: "Report deleted succesfully"
+    });
+  });
 };
-
 
 exports.update = (req, res) => {
   let form = new formidable.IncomingForm();
@@ -76,16 +73,16 @@ exports.update = (req, res) => {
       return res.status(400).json({ error: "File could not be uploaded" });
     }
     // check for all fields
-    const { company, year, filename, security, file } = fields;
+    // const { company, year, filename, security, file } = fields;
 
-    if (!company || !year || !filename || !security ) {
-      return res.status(400).json({
-        error: " All fields are required "
-      });
-    }
+    // if (!company || !year || !filename || !security) {
+    //   return res.status(400).json({
+    //     error: " All fields are required "
+    //   });
+    // }
 
-    let annualreport = req.annualreport
-    annualreport = _.extend(annualreport, fields)
+    let annualreport = req.annualreport;
+    annualreport = _.extend(annualreport, fields);
 
     if (files.file) {
       console.log("FILES PHOTO", files.file);
@@ -100,5 +97,67 @@ exports.update = (req, res) => {
       res.json(result);
     });
   });
+};
+
+exports.list = (req, res) => {
+  let order = req.query.order ? req.query.order : "asc";
+  let sortBy = req.query.sortBy ? req.query.sortBy : "_id";
+  let limit = req.query.limit ? parseInt(req.query.limit) : 100;
+
+  Annualreport.find()
+    .select("-file")
+    .populate("security")
+    .sort([[sortBy, order]])
+    .limit(limit)
+    .exec((err, reports) => {
+      if (err) {
+        return res.status(400).json({
+          error: "Report not found"
+        });
+      }
+      res.json(reports);
+    });
+};
+
+/**
+ * it will find the annual report nased on the req report security
+ */
+
+
+exports.listRelated = (req, res) => {
+  let limit = req.query.limit ? parseInt(req.query.limit) : 100;
+
+  Annualreport.find({_id: {$ne: req.annualreport}, security: req.annualreport.security})
+  .limit(limit)
+  .populate('category', '_id, symbol')
+  .exec((err, report) => {
+    if (err) {
+      return res.status(400).json({
+        error: "Report not found"
+      });
+    }
+    res.json(report)
+  })
+}
+
+
+exports.listSecurity = (req, res) => {
+  Annualreport.distinct("security", {}, (err, report) => {
+    if (err) {
+      return res.status(400).json({
+        error: "Report not found"
+      });
+    }
+    res.json(report);
+  });
+};
+
+
+exports.file = (req, res, next) => {
+  if(req.annualreport.file.data){
+    res.set('Content-Type', req.annualreport.file.contentType)
+    return res.send(req.annualreport.file.data);
+  }
+  next();
 };
 
