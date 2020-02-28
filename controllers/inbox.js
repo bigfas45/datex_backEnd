@@ -43,8 +43,10 @@ exports.getInbox = (req, res) => {
 
 
 exports.dateId2 = (req, res, next, id) => {
-    let sql = "SELECT market_activity_sheet.SECURITY, market_activity_sheet.SYMBOL, market_activity_sheet.CLOSE_PRICE, market_activity_sheet.DEALS, market_activity_sheet.VOLUME, market_activity_sheet.VALUE , prices.refprice FROM `market_activity_sheet` INNER JOIN security_to_traded ON market_activity_sheet.SYMBOL=security_to_traded.`COL 11` INNER JOIN prices ON security_to_traded.`COL 1` = prices.security_code WHERE market_activity_sheet.`DATE`=? ";
-    let query = db.query(sql, [id], (err, results) => {
+    let date1 = req.params.date2
+    let date2 = req.params.date3
+    let sql = "SELECT market_activity_sheet.SECURITY, market_activity_sheet.SYMBOL, market_activity_sheet.CLOSE_PRICE, market_activity_sheet.DEALS, market_activity_sheet.VOLUME, market_activity_sheet.VALUE , general_market_summary.`Ref Price` as refprice FROM `market_activity_sheet` INNER JOIN security_to_traded ON market_activity_sheet.SYMBOL=security_to_traded.`COL 11` INNER JOIN general_market_summary ON security_to_traded.`COL 11` = general_market_summary.Security WHERE market_activity_sheet.`DATE`=? AND general_market_summary.Date=? ";
+    let query = db.query(sql, [date1,date2], (err, results) => {
         if (err || !results) {
             return res.status(400).json({
                 error: 'not found'
