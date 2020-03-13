@@ -32,8 +32,8 @@ router.put(
 
   router.get('/nasd/annualreport', list);
   router.get('/nasd/annualreport/related/:reportId', listRelated);
-  router.get("/nasd/annualreport/security", listSecurity)
-,  router.get('/nasd/annualreport/report/:reportId', file)
+  router.get("/nasd/annualreport/security", listSecurity);
+  router.get('/nasd/annualreport/report/:reportId', file);
 
 router.param("userId", userById);
 router.param("reportId", reportById);
