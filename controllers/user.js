@@ -1,8 +1,9 @@
 const User = require("../models/user");
 const Mail = require("../models/mail");
 const sgMail = require("@sendgrid/mail");
-sgMail.setApiKey("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");
-const fs = require("fs");
+sgMail.setApiKey(
+    process.env.SDMAILKEY
+);const fs = require("fs");
 
 exports.userById = (req, res, next, id) => {
     User.findById(id).exec((err, user) => {
@@ -417,8 +418,10 @@ Nigeria<br>
                     }
                 ]
             };
-            sgMail.send(emailData);
-            sgMail.send(emailData).then(sent => console.log("SENT >>>")).catch(err => console.log("ERR >>>", err));
+            sgMail
+            .send(emailData)
+            .then(sent => console.log('SENT 2 >>>'))
+            .catch(err => console.log('ERR 2 >>>', err));
         }
         res.json(users);
     });

@@ -5,7 +5,7 @@ const Mail = require("../models/mail");
 const { errorHandler } = require("../hlepers/dbErrorHandler");
 const sgMail = require("@sendgrid/mail");
 sgMail.setApiKey(
-  "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"
+    process.env.SDMAILKEY
 );
 const db = require("../models/mysql");
 
@@ -135,7 +135,7 @@ exports.mailtest = (req, res) => {
 
   const emailData = {
     to: `${email2}`,
-    from: "afasina@nasdng.com",
+    from: "marketreports@nasdng.com",
     subject: `${subject}`,
     html: `
             <table border="0" align="center" width="100%" cellpadding="0" cellspacing="0" bgcolor="#f9fafc" style="background-color:rgb(249,250,252)">
@@ -450,11 +450,10 @@ Nigeria<br>
       }
     ]
   };
-  sgMail.send(emailData);
   sgMail
-    .send(emailData)
-    .then(sent => console.log("SENT >>>"))
-    .catch(err => console.log("ERR >>>", err));
+  .send(emailData)
+  .then(sent => console.log('SENT 2 >>>'))
+  .catch(err => console.log('ERR 2 >>>', err));
 
   res.json("Mail sent");
 };
@@ -796,11 +795,10 @@ Nigeria<br>
             }
           ]
         };
-        sgMail.send(emailData);
         sgMail
-          .send(emailData)
-          .then(sent => console.log("SENT >>>"))
-          .catch(err => console.log("ERR >>>", err));
+        .send(emailData)
+        .then(sent => console.log('SENT 2 >>>'))
+        .catch(err => console.log('ERR 2 >>>', err));
       }
 
       return res.json(results);
