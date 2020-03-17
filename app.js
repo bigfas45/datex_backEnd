@@ -22,6 +22,8 @@ const nasdsecurityRoutes = require('./routes/security');
 const annualreportRoutes = require('./routes/annualreport');
 const participantRoutes = require('./routes/participant');
 const mailRoutes = require('./routes/mail');
+const priceRoutes = require('./routes/price');
+
 
 
 
@@ -72,6 +74,8 @@ app.use('/api',nasdsecurityRoutes);
 app.use('/api',annualreportRoutes);
 app.use('/api',participantRoutes);
 app.use('/api',mailRoutes);
+app.use('/api',priceRoutes);
+
 
 
 

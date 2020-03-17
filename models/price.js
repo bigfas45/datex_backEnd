@@ -1,51 +1,25 @@
 const mongoose = require('mongoose')
-const crypto = require('crypto')
-const uuidv1 = require('uuid/v1')
+const {ObjectId} = mongoose.Schema
 const priceSchema = new mongoose.Schema({
-    Date: {
-        type: Date,
-        trim: true,
-        required: true,
-        maxlength: 32
-
-    },
-    Security: {
-        type: String,
-        trim: true,
-        maxlength: 32
-    },
-    Security_Name: {
-        type: String,
-        trim: true,
-        required: true,
-        unique: 32
-
-    },
-    Issued_Shares: {
-        type: Number,
-        trim: true,
+   
     
-    },
+    
     Ref_Price: {
-        type: String,
+        type: Number,
         trim: true,
     },
-    Quote_Basis: String,
-    role:{
+    Open_Price: {
         type: Number,
-        default: 0
-    },
-    Bid_Depth:{
-        type: Number,
-        default: 0
-    },
-    Bid_Price: {
-        type: Number
-    },
-    Offer_Price: {
-        type: String,
         trim: true,
-    }
+    },
+    security: {
+        type: ObjectId,
+        ref: 'Security',
+        required: true,
+        unique: true
+    },
+   
+    
 }, {timestamps: true}
 );
 
@@ -57,4 +31,4 @@ const priceSchema = new mongoose.Schema({
 
 
    
-module.exports = mongoose.model("User", priceSchema);
+module.exports = mongoose.model("Price", priceSchema);

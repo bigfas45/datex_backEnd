@@ -5,7 +5,8 @@ const Annualreport = require("../models/annualreport");
 const { errorHandler } = require("../hlepers/dbErrorHandler");
 
 exports.reportById = (req, res, next, id) => {
-  Annualreport.findById(id).exec((err, annualreport) => {
+  Annualreport.findById(id)
+  .exec((err, annualreport) => {
     if (err || !annualreport) {
       return res.status(400).json({
         error: " Report not found"

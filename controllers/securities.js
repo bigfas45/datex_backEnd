@@ -182,7 +182,7 @@ exports.performanceEndSecurity = (req, res) => {
 
 
 exports.totalBidsById = (req, res, next, id ) => {
-let sql = "SELECT `symbol`, `bidprice`, `volume` FROM `bids` WHERE symbol=? ORDER BY bidprice ASC"
+let sql = "SELECT `symbol`, `bidprice`, `volume` FROM `bids` WHERE symbol=? ORDER BY bidprice DESC"
     let query = db2.query(sql, [id], (err, results) => {
         if (err || !results) {
             return res.status(400).json({
@@ -206,7 +206,7 @@ exports.totalOffersById = (req, res, next, id ) => {
     
     
     
-    let sql = "SELECT `symbol`,`askprice`,`volume` FROM `offers` WHERE `symbol`=? ORDER BY askprice DESC"
+    let sql = "SELECT `symbol`,`askprice`,`volume` FROM `offers` WHERE `symbol`=? ORDER BY askprice ASC"
         let query = db2.query(sql, [id], (err, results) => {
             if (err || !results) {
                 return res.status(400).json({
