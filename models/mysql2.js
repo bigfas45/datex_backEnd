@@ -1,13 +1,16 @@
 const mysql = require('mysql');
 
 const db2 = mysql.createConnection({
-  host      : '192.169.233.185',
-  user      : 'notcsadm_excalib',
-  password  : 'DRp@r6iLa0_j',
-  database  : 'notcsadm_nasdngx',
-  multipleStatements: true
+  
+host      : process.env.HOST2,
+user      : process.env.DBUSER2,
+password  :  process.env.DBPASS2,
+database  :  process.env.DATABASENAME2,
+multipleStatements: true
+
 
 });
+
 
 // connect 
 db2.connect((err) => {

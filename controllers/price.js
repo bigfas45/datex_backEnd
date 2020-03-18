@@ -3,6 +3,9 @@ const formidable = require("formidable");
 const _ = require("lodash");
 const fs = require("fs");
 const {errorHandler} = require('../hlepers/dbErrorHandler');
+const db = require("../models/mysql");
+const csv = require('fast-csv');
+
 
 
 
@@ -99,6 +102,31 @@ exports.create = (req, res) => {
         }
         res.json(security)
     })
+}
+
+
+exports.vwap = (req, res) => {
+
+  let stream = fs.createReadStream("controllers/W_security.csv");
+  let myData = [];
+  let csvStream = csv
+      .parse()
+      .on("data", function (data) {
+          myData.push(data);
+      })
+      .on("end", function () {
+      myData.shift();
+     
+          let query = 'INSERT INTO `W_security` (`symbol`, `trade_value`, `market_capitization`, `isin`, `par`, `instrument_type`, `symbol_code`, `no_of_dematerlisation`, `sector`, `phone`, `address`, `emails`, `registrar`, `board_members`, `website`) VALUES ?';
+          db.query(query, [myData], (error, response) => {
+            console.log(error || response);
+            res.json(response)
+          });
+     
+       });
+  
+  stream.pipe(csvStream);
+
 }
 
   
