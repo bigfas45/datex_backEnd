@@ -1,4 +1,6 @@
 const Price = require('../models/price');
+const UploadFile = require('../models/uploadFile');
+
 const formidable = require("formidable");
 const _ = require("lodash");
 const fs = require("fs");
@@ -27,6 +29,23 @@ exports.priceById = (req, res, next, id) => {
     return res.json(req.price);
     next();
 };
+
+
+exports.fileById = (req, res, next, id) => {
+  UploadFile.findById(id)
+
+  .exec((err, file) => {
+    if (err || !file) {
+      return res.status(400).json({
+        error: " file not found"
+      });
+    }
+    req.file = file;
+    next();
+  });
+};
+
+
 
 
 exports.create = (req, res) => {
@@ -106,8 +125,10 @@ exports.create = (req, res) => {
 
 
 exports.vwap = (req, res) => {
-
-  let stream = fs.createReadStream("controllers/W_security.csv");
+  var filePath = req.file.file.path;
+  var fileName = req.file.file.name;
+  var contentType = req.file.file.contentType;
+  let stream = fs.createReadStream(filePath);
   let myData = [];
   let csvStream = csv
       .parse()
@@ -117,7 +138,7 @@ exports.vwap = (req, res) => {
       .on("end", function () {
       myData.shift();
      
-          let query = 'INSERT INTO `W_security` (`symbol`, `trade_value`, `market_capitization`, `isin`, `par`, `instrument_type`, `symbol_code`, `no_of_dematerlisation`, `sector`, `phone`, `address`, `emails`, `registrar`, `board_members`, `website`) VALUES ?';
+          let query = 'INSERT INTO `data` (`id`, `EXTERNAL TICKET`, `TO MEMBER`, `TO ACCOUNT`, `TO REFERENCE`, `TO FREEZE ID`, `FROM MEMBER`, `FROM ACCOUNT`, `FROM REFERENCE`, `FROM FREEZE ID`, `SYMBOL`, `VOLUME`, `PRICE`, `TRADE DATE`, `TRADE TIME`, `SETTLEMENT DATE`, `TOTAL VALUE`, `INTEREST VALUE`, `TRADE STATUS`, `NEW EXTERNAL TICKET`, `AMEND TIME`, `st`)  VALUES ?';
           db.query(query, [myData], (error, response) => {
             console.log(error || response);
             res.json(response)
@@ -129,4 +150,38 @@ exports.vwap = (req, res) => {
 
 }
 
+
+exports.fileUpload = (req, res) => {
+  let form = new formidable.IncomingForm();
+  form.keepExtensions = true;
+  form.parse(req, (err, fields, files) => {
+    if (err) {
+      return res.status(400).json({ error: "File could not be uploaded" });
+    }
+    // check for all fields
+    const { name, file } = fields;
+
+    if (!name) {
+      return res.status(400).json({
+        error: " All fields are required "
+      });
+    }
+
+    let uploadFile = new UploadFile(fields);
+    if (files.file) {
+      console.log("FILES PHOTO", files.file);
+      uploadFile.file.data = fs.readFileSync(files.file.path, "utf8");
+      uploadFile.file.contentType = files.file.type;
+      uploadFile.file.path = files.file.path;
+      uploadFile.file.name = files.file.name;
+    }
+
+    uploadFile.save((err, result) => {
+      if (err) {
+        return res.status(400).json({ error: errorHandler(err) });
+      }
+      res.json(result);
+    });
+  });
+};
   
