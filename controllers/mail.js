@@ -124,7 +124,7 @@ exports.file = (req, res, next) => {
 exports.mailtest = (req, res) => {
   console.log(req.mail);
 
-  let email2 = "marketoperations@nasdng.com";
+  let email2 = "afasina@nasdng.com";
   let subject = req.mail.subject;
   let message = req.mail.message;
   var filePath = req.mail.file.path;
@@ -201,6 +201,41 @@ exports.mailtest = (req, res) => {
                     </td>
                 </tr>
             </tbody></table>
+            <tr>
+
+        <td align="center" valign="top">
+
+            <div style="background-color:rgb(255,255,255)">
+                
+                
+                
+                
+                <table class="m_-5370929821485784635rnb-del-min-width" width="100%" cellpadding="0" border="0" cellspacing="0" style="min-width:100%;line-height:10px" name="Layout_8" id="m_-5370929821485784635Layout_8">
+                <tbody><tr>
+                    <td class="m_-5370929821485784635rnb-del-min-width" valign="top" align="center" style="min-width:590px">
+                        <table width="100%" class="m_-5370929821485784635rnb-container" cellpadding="0" border="0" bgcolor="#ffffff" align="center" cellspacing="0" style="background-color:rgb(255,255,255)">
+                            <tbody><tr>
+                                <td valign="top" align="center">
+                                    <table cellspacing="0" cellpadding="0" border="0">
+                                        <tbody><tr>
+                                            <td>
+                                                <div style="display:inherit;border-radius:0px;width:590;max-width:590px!important;border-top:0px None #000;border-right:0px None #000;border-bottom:0px None #000;border-left:0px None #000;border-collapse:separate;border-radius:0px">
+                                                    <div><img border="0" hspace="0" vspace="0" width="590" class="m_-5370929821485784635rnb-header-img CToWUd a6T" alt="" style="display:block;float:left;border-radius:0px" src="https://nasdng.com/wp-content/uploads/2020/03/covid-19-update-wide.jpg" tabindex="0"><div class="a6S" dir="ltr" style="opacity: 0.01; left: 722px; top: 357px;"><div id=":3kh" class="T-I J-J5-Ji aQv T-I-ax7 L3 a5q" role="button" tabindex="0" aria-label="Download attachment " data-tooltip-class="a1V" data-tooltip="Download"><div class="aSK J-J5-Ji aYr"></div></div></div></div><div style="clear:both"></div>
+                                                    </div></td>
+                                        </tr>
+                                    </tbody></table>
+
+                                </td>
+                            </tr>
+                        </tbody></table>
+                    </td>
+                </tr></tbody></table>
+            
+                
+                
+            
+        </div></td>
+    </tr>
             
                 
                 
@@ -810,7 +845,7 @@ Nigeria<br>
 
 
 exports.sendEmailToNasdParticipant = (req, res) => {
-    let sql = "SELECT * FROM `pi` ";
+    let sql = "SELECT * FROM `pi`  ";
     let query = db.query(sql, (err, results) => {
       if (err || !results) {
         return res.status(400).json({
@@ -897,12 +932,51 @@ exports.sendEmailToNasdParticipant = (req, res) => {
           </td>
       </tr>
   </tbody></table>
+
+
   
       
       
   
   </div></td>
-  </tr><tr>
+  </tr>
+  
+  <tr>
+
+  <td align="center" valign="top">
+
+      <div style="background-color:rgb(255,255,255)">
+          
+          
+          
+          
+          <table class="m_-5370929821485784635rnb-del-min-width" width="100%" cellpadding="0" border="0" cellspacing="0" style="min-width:100%;line-height:10px" name="Layout_8" id="m_-5370929821485784635Layout_8">
+          <tbody><tr>
+              <td class="m_-5370929821485784635rnb-del-min-width" valign="top" align="center" style="min-width:590px">
+                  <table width="100%" class="m_-5370929821485784635rnb-container" cellpadding="0" border="0" bgcolor="#ffffff" align="center" cellspacing="0" style="background-color:rgb(255,255,255)">
+                      <tbody><tr>
+                          <td valign="top" align="center">
+                              <table cellspacing="0" cellpadding="0" border="0">
+                                  <tbody><tr>
+                                      <td>
+                                          <div style="display:inherit;border-radius:0px;width:590;max-width:590px!important;border-top:0px None #000;border-right:0px None #000;border-bottom:0px None #000;border-left:0px None #000;border-collapse:separate;border-radius:0px">
+                                              <div><img border="0" hspace="0" vspace="0" width="590" class="m_-5370929821485784635rnb-header-img CToWUd a6T" alt="" style="display:block;float:left;border-radius:0px" src="https://nasdng.com/wp-content/uploads/2020/03/covid-19-update-wide.jpg" tabindex="0"><div class="a6S" dir="ltr" style="opacity: 0.01; left: 722px; top: 357px;"><div id=":3kh" class="T-I J-J5-Ji aQv T-I-ax7 L3 a5q" role="button" tabindex="0" aria-label="Download attachment " data-tooltip-class="a1V" data-tooltip="Download"><div class="aSK J-J5-Ji aYr"></div></div></div></div><div style="clear:both"></div>
+                                              </div></td>
+                                  </tr>
+                              </tbody></table>
+
+                          </td>
+                      </tr>
+                  </tbody></table>
+              </td>
+          </tr></tbody></table>
+      
+          
+          
+      
+  </div></td>
+</tr>
+  <tr>
   
   <td align="center" valign="top">
   
