@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 
-const { brokers, brokers2, brokersTopTen , dateTopTenByDate1, brokersTrades, codeById, brokersTradeSell, codeSellById, brokersTradeDaily, codeDailyById} = require('../controllers/brokers');
+const { brokers,piList, brokers2, brokersTopTen , dateTopTenByDate1, brokersTrades, codeById, brokersTradeSell, codeSellById, brokersTradeDaily, codeDailyById} = require('../controllers/brokers');
 
 router.get('/brokers',brokers);
 router.get('/brokers2',brokers2);
@@ -13,6 +13,7 @@ router.get('/brokers/Trades/sell/:codeSell',brokersTradeSell);
 
 router.get('/brokers/Trades/daily/:codeDaily',brokersTradeDaily);
 
+router.get('/pi/list',piList);
 
 
 router.param('dateTopTen', dateTopTenByDate1);

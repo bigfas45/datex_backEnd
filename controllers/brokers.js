@@ -21,6 +21,24 @@ exports.brokers = (req, res) => {
   });
 };
 
+
+exports.piList = (req, res) => {
+  var startYearDay = new Date(new Date().getFullYear(), 0, 1);
+  var momentDate1 = moment(startYearDay);
+  var start = momentDate1.format("YYYY");
+  let sql =
+    "SELECT * FROM `pi_sheet` ORDER BY `pi_sheet`.`id` ASC ";
+  let query = db.query(sql, [start], (err, results) => {
+    if (err || !results) {
+      return res.status(400).json({
+        error: "not found"
+      });
+    } else {
+      return res.json(results);
+    }
+  });
+};
+
 exports.brokers2 = (req, res) => {
   var startYearDay = new Date(new Date().getFullYear(), 0, 1);
   var momentDate1 = moment(startYearDay);

@@ -237,7 +237,6 @@ exports.remove = (req, res) => {
 exports.fileList = (req, res) => {
   let order = req.query.order ? req.query.order : "asc";
   let sortBy = req.query.sortBy ? req.query.sortBy : "_id";
-
   UploadFile.find()
   .select("-file")
     .sort([[sortBy, order]])
