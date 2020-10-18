@@ -8,7 +8,7 @@ const { requireSignin, isAuth, isAdmin } = require("../controllers/auth");
 router.post('/mail/:userId', requireSignin, isAuth, isAdmin ,create);
 router.get('/mail/list', list);
 router.get('/mail/file/:mailId', file);
-router.get('/mail/mailtest/:mailId/:userId', requireSignin,isAuth, mailtest);
+router.post('/mail/mailtest/:mailId/:userId', requireSignin,isAuth, mailtest);
 router.get('/mail/sendEmailToAllMarketParticiapnt/:mailId/:userId', requireSignin,isAuth, sendEmailToAllMarketParticiapnt);
 router.get('/mail/sendEmailToNasdParticipant/:mailId/:userId', requireSignin,isAuth, sendEmailToNasdParticipant);
 
