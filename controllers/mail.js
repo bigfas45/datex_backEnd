@@ -119,7 +119,7 @@ exports.file = (req, res, next) => {
 };
 
 exports.mailtest = (req, res) => {
-     let sql = "SELECT * FROM `pi` WHERE `email`='afasina@nasdng.com'";
+     let sql = "SELECT * FROM `pi` WHERE `email`='marketoperations@nasdng.com'";
      let query = db.query(sql, (err, results) => {
        if (err || !results) {
          return res.status(400).json({
