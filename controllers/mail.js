@@ -854,7 +854,7 @@ Nigeria<br>
 };
 
 exports.sendEmailToNasdParticipant = (req, res) => {
-  let sql = "SELECT * FROM `pi` WHERE `email`='afasina@nasdng.com'";
+  let sql = "SELECT * FROM `pi`";
   let query = db.query(sql, (err, results) => {
     if (err || !results) {
       return res.status(400).json({
