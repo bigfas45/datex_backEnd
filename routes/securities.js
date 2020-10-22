@@ -6,7 +6,7 @@ const {
     symbols, securityData, secSymById, secSymByIdMcap, securityMcap, secSymByIdTtrades, 
     totalTrade, secDealsById, totalDeals, performanceStartByDate, 
     performanceStart, performanceEndByDate, performanceEnd, performanceEndByDateSecurity,
-     performanceStartByDateSecurity, performanceEndSecurity, performanceStartSecurity, totalBidsById, totalBids,totalOffers, totalOffersById} = require('../controllers/securities');
+     performanceStartByDateSecurity, performanceEndSecurity, performanceStartSecurity, totalBidsById, totalBids,totalOffers, totalOffersById, companies} = require('../controllers/securities');
 
 router.get('/security/symbol',  symbols);
 router.get('/security/:secId',  securityData);
@@ -24,7 +24,7 @@ router.get('/security/performanceEnd/:performanceEndDate',  performanceEnd);
 router.get('/security/performanceEndSecurity/:performanceEndDateSecurity/:performanceEndDateSecurity2',  performanceEndSecurity);
 router.get('/security/performanceStartSecurity/:performanceStartDateSecurity',  performanceStartSecurity);
 
-
+router.get('/security/companies/research', companies);
 
 
 

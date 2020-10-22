@@ -119,7 +119,7 @@ exports.file = (req, res, next) => {
 };
 
 exports.mailtest = (req, res) => {
-     let sql = "SELECT * FROM `pi` WHERE `email`='marketoperations@nasdng.com'";
+     let sql = "SELECT * FROM `pi` WHERE `email`='afasina@nasdng.com'";
      let query = db.query(sql, (err, results) => {
        if (err || !results) {
          return res.status(400).json({
@@ -236,7 +236,7 @@ exports.mailtest = (req, res) => {
                                   <tbody><tr>
                                       <td>
                                           <div style="display:inherit;border-radius:0px;width:590;max-width:590px!important;border-top:0px None #000;border-right:0px None #000;border-bottom:0px None #000;border-left:0px None #000;border-collapse:separate;border-radius:0px">
-                                              <div><img border="0" hspace="0" vspace="0" width="590" class="m_-5370929821485784635rnb-header-img CToWUd a6T" alt="" style="display:block;float:left;border-radius:0px" src="" tabindex="0"><div class="a6S" dir="ltr" style="opacity: 0.01; left: 722px; top: 357px;"><div id=":3kh" class="T-I J-J5-Ji aQv T-I-ax7 L3 a5q" role="button" tabindex="0" aria-label="Download attachment " data-tooltip-class="a1V" data-tooltip="Download"><div class="aSK J-J5-Ji aYr"></div></div></div></div><div style="clear:both"></div>
+                                              <div><img border="0" hspace="0" vspace="0" width="590" class="m_-5370929821485784635rnb-header-img CToWUd a6T" alt="https://nasdng.com/wp-content/uploads/2020/10/unnamed.png" style="display:block;float:left;border-radius:0px" src="https://nasdng.com/wp-content/uploads/2020/10/unnamed.png" tabindex="0"><div class="a6S" dir="ltr" style="opacity: 0.01; left: 722px; top: 357px;"><div id=":3kh" class="T-I J-J5-Ji aQv T-I-ax7 L3 a5q" role="button" tabindex="0" aria-label="Download attachment " data-tooltip-class="a1V" data-tooltip="Download"><div class="aSK J-J5-Ji aYr"></div></div></div></div><div style="clear:both"></div>
                                               </div></td>
                                   </tr>
                               </tbody></table>
@@ -974,7 +974,7 @@ exports.sendEmailToNasdParticipant = (req, res) => {
                                   <tbody><tr>
                                       <td>
                                           <div style="display:inherit;border-radius:0px;width:590;max-width:590px!important;border-top:0px None #000;border-right:0px None #000;border-bottom:0px None #000;border-left:0px None #000;border-collapse:separate;border-radius:0px">
-                                              <div><img border="0" hspace="0" vspace="0" width="590" class="m_-5370929821485784635rnb-header-img CToWUd a6T" alt="" style="display:block;float:left;border-radius:0px" src="" tabindex="0"><div class="a6S" dir="ltr" style="opacity: 0.01; left: 722px; top: 357px;"><div id=":3kh" class="T-I J-J5-Ji aQv T-I-ax7 L3 a5q" role="button" tabindex="0" aria-label="Download attachment " data-tooltip-class="a1V" data-tooltip="Download"><div class="aSK J-J5-Ji aYr"></div></div></div></div><div style="clear:both"></div>
+                                              <div><img border="0" hspace="0" vspace="0" width="590" class="m_-5370929821485784635rnb-header-img CToWUd a6T" alt="https://nasdng.com/wp-content/uploads/2020/10/unnamed.png" style="display:block;float:left;border-radius:0px" src="https://nasdng.com/wp-content/uploads/2020/10/unnamed.png" tabindex="0"><div class="a6S" dir="ltr" style="opacity: 0.01; left: 722px; top: 357px;"><div id=":3kh" class="T-I J-J5-Ji aQv T-I-ax7 L3 a5q" role="button" tabindex="0" aria-label="Download attachment " data-tooltip-class="a1V" data-tooltip="Download"><div class="aSK J-J5-Ji aYr"></div></div></div></div><div style="clear:both"></div>
                                               </div></td>
                                   </tr>
                               </tbody></table>
@@ -1225,7 +1225,7 @@ exports.sendEmailToNasdParticipant = (req, res) => {
   </tr>
   </tbody></table>
   `,
-          
+
           attachment: attch,
         };
         mg.messages().send(emailData, function (error, body) {
