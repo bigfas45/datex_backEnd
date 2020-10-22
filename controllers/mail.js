@@ -1,15 +1,9 @@
 const formidable = require('formidable');
 const _ = require('lodash');
 const fs = require('fs');
-var request = require('request');
 const Mail = require('../models/mail');
 const { errorHandler } = require('../hlepers/dbErrorHandler');
-const mailgun = require('mailgun-js');
-const DOMAIN = 'nasdotcng.com';
-const mg = mailgun({
-  apiKey: process.env.MAILGUNKEY,
-  domain: DOMAIN,
-});
+
 const db = require('../models/mysql');
 
 exports.mailById = (req, res, next, id) => {
@@ -37,7 +31,7 @@ exports.create = (req, res) => {
       return res.status(400).json({ error: 'File could not be uploaded' });
     }
     // check for all fields
-    const { subject, message, file } = fields;
+    const { subject, message, file, link } = fields;
 
     if (!subject || !message) {
       return res.status(400).json({
@@ -118,33 +112,37 @@ exports.file = (req, res, next) => {
   next();
 };
 
+
+
 exports.mailtest = (req, res) => {
-     let sql = "SELECT * FROM `pi` WHERE `email`='afasina@nasdng.com'";
-     let query = db.query(sql, (err, results) => {
-       if (err || !results) {
-         return res.status(400).json({
-           error: 'not found',
-         });
-       } else {
-         for (let val of results) {
-           console.log(val.email);
+  const sgMail = require('@sendgrid/mail');
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+  console.log(req.mail);
 
-           let subject = req.mail.subject;
-           let message = req.mail.message;
-           var filePath = req.mail.file.path;
-           var fileName = req.mail.file.name;
-           var contentType = req.mail.file.contentType;
+  let sql = "SELECT * FROM `pi` WHERE `email`='marketoperations@nasdng.com'";
+  let query = db.query(sql, (err, results) => {
+    if (err || !results) {
+      return res.status(400).json({
+        error: 'not found',
+      });
+    } else {
+      for (let val of results) {
+        console.log(val.email);
 
-           //   var filepath = path.join(__dirname, fileName);
-           var file = fs.readFileSync(filePath);
+        let subject = req.mail.subject;
+        let message = req.mail.message;
+        var filePath = req.mail.file.path;
+        var link = req.mail.link;
+        var fileName = req.mail.file.name;
+        var contentType = req.mail.file.contentType;
 
-           var attch = new mg.Attachment({ data: file, filename: fileName });
-
-           const emailData = {
-             to: `${val.email}`,
-             from: 'marketreports@nasdng.com',
-             subject: `${subject}`,
-             html: `
+        pathToAttachment = `${filePath}`;
+        attachment = fs.readFileSync(pathToAttachment).toString('base64');
+        const emailData = {
+          to: `${val.email}`,
+          from: 'marketoperations@nasdng.com', // Change to your verified sender
+          subject: `${subject}`,
+          html: `
   <table border="0" align="center" width="100%" cellpadding="0" cellspacing="0" bgcolor="#f9fafc" style="background-color:rgb(249,250,252)">
   
   <tbody><tr style="display:none!important;font-size:1px"><td></td><td></td></tr><tr>
@@ -193,8 +191,8 @@ exports.mailtest = (req, res) => {
                                       <table cellpadding="0" border="0" align="left" cellspacing="0" class="m_-61096145151473185logo-img-center"> 
                                           <tbody><tr>
                                               <td valign="middle" align="center" style="line-height:1px">
-                                              <div style="border-top:0px None #000;border-right:0px None #000;border-bottom:0px None #000;border-left:0px None #000;display:inline-block" cellspacing="0" cellpadding="0" border="0"><div><a style="text-decoration:none" href="http://47c9c.r.ag.d.sendibm3.com/mk/cl/f/3Yldga7Mc95aruzbZjqaZ1qVfb5YXGb402yuKwjWcATAg9nub1rMK9xArYt1I4lfa2HlhWDg49-DIDaaXjgbCqfWeeZucOsC1OxlElWwEgwvzoDyb-lfPIcPrnfLzq4ZJtJLSPWUWBGxe1Gr9COg62LWEEY" target="_blank" data-saferedirecturl="https://www.google.com/url?q=http://47c9c.r.ag.d.sendibm3.com/mk/cl/f/3Yldga7Mc95aruzbZjqaZ1qVfb5YXGb402yuKwjWcATAg9nub1rMK9xArYt1I4lfa2HlhWDg49-DIDaaXjgbCqfWeeZucOsC1OxlElWwEgwvzoDyb-lfPIcPrnfLzq4ZJtJLSPWUWBGxe1Gr9COg62LWEEY&amp;source=gmail&amp;ust=1583929089887000&amp;usg=AFQjCNF-GoLXZyWZ49Ey0zTpRl-KPVSghA"></a></div>
-                                              </div></td>
+                                                  <div style="border-top:0px None #000;border-right:0px None #000;border-bottom:0px None #000;border-left:0px None #000;display:inline-block" cellspacing="0" cellpadding="0" border="0"><div><a style="text-decoration:none" href="http://47c9c.r.ag.d.sendibm3.com/mk/cl/f/3Yldga7Mc95aruzbZjqaZ1qVfb5YXGb402yuKwjWcATAg9nub1rMK9xArYt1I4lfa2HlhWDg49-DIDaaXjgbCqfWeeZucOsC1OxlElWwEgwvzoDyb-lfPIcPrnfLzq4ZJtJLSPWUWBGxe1Gr9COg62LWEEY" target="_blank" data-saferedirecturl="https://www.google.com/url?q=http://47c9c.r.ag.d.sendibm3.com/mk/cl/f/3Yldga7Mc95aruzbZjqaZ1qVfb5YXGb402yuKwjWcATAg9nub1rMK9xArYt1I4lfa2HlhWDg49-DIDaaXjgbCqfWeeZucOsC1OxlElWwEgwvzoDyb-lfPIcPrnfLzq4ZJtJLSPWUWBGxe1Gr9COg62LWEEY&amp;source=gmail&amp;ust=1583929089887000&amp;usg=AFQjCNF-GoLXZyWZ49Ey0zTpRl-KPVSghA"><img width="141" vspace="0" hspace="0" border="0" alt="NASD Plc" style="float:left;max-width:141px" class="m_-61096145151473185rnb-logo-img CToWUd" src="https://nasdng.com/wp-content/uploads/2020/02/logo.png"></a></div>
+                                                  </div></td>
                                           </tr>
                                       </tbody></table>
                                       </td>
@@ -208,8 +206,6 @@ exports.mailtest = (req, res) => {
           </td>
       </tr>
   </tbody></table>
-
-
   
       
       
@@ -218,9 +214,7 @@ exports.mailtest = (req, res) => {
   </tr>
   
   <tr>
-
   <td align="center" valign="top">
-
       <div style="background-color:rgb(255,255,255)">
           
           
@@ -236,11 +230,10 @@ exports.mailtest = (req, res) => {
                                   <tbody><tr>
                                       <td>
                                           <div style="display:inherit;border-radius:0px;width:590;max-width:590px!important;border-top:0px None #000;border-right:0px None #000;border-bottom:0px None #000;border-left:0px None #000;border-collapse:separate;border-radius:0px">
-                                              <div><img border="0" hspace="0" vspace="0" width="590" class="m_-5370929821485784635rnb-header-img CToWUd a6T" alt="https://nasdng.com/wp-content/uploads/2020/10/unnamed.png" style="display:block;float:left;border-radius:0px" src="https://nasdng.com/wp-content/uploads/2020/10/unnamed.png" tabindex="0"><div class="a6S" dir="ltr" style="opacity: 0.01; left: 722px; top: 357px;"><div id=":3kh" class="T-I J-J5-Ji aQv T-I-ax7 L3 a5q" role="button" tabindex="0" aria-label="Download attachment " data-tooltip-class="a1V" data-tooltip="Download"><div class="aSK J-J5-Ji aYr"></div></div></div></div><div style="clear:both"></div>
+                                              <div><img border="0" hspace="0" vspace="0" width="590" class="m_-5370929821485784635rnb-header-img CToWUd a6T" alt="" style="display:block;float:left;border-radius:0px" src="${link}" tabindex="0"><div class="a6S" dir="ltr" style="opacity: 0.01; left: 722px; top: 357px;"><div id=":3kh" class="T-I J-J5-Ji aQv T-I-ax7 L3 a5q" role="button" tabindex="0" aria-label="Download attachment " data-tooltip-class="a1V" data-tooltip="Download"><div class="aSK J-J5-Ji aYr"></div></div></div></div><div style="clear:both"></div>
                                               </div></td>
                                   </tr>
                               </tbody></table>
-
                           </td>
                       </tr>
                   </tbody></table>
@@ -488,26 +481,28 @@ exports.mailtest = (req, res) => {
   </tbody></table>
   `,
 
-             attachment: attch,
-           };
-           mg.messages().send(emailData, function (error, body) {
-             console.log(body);
-           });
-         }
+          attachments: [
+            {
+              filename: fileName,
+              content: attachment,
+              type: contentType,
+              disposition: 'attachment',
+            },
+          ],
+        };
+        sgMail
+          .send(emailData)
+          .then((sent) => console.log('SENT 2 >>>'))
+          .catch((err) => console.log('ERR 2 >>>', err));
+      }
 
-         return res.json(results);
-       }
-     });
+      return res.json(results);
+    }
+  });
 };
 
 exports.sendEmailToAllMarketParticiapnt = (req, res) => {
-     const mailgun = require('mailgun-js');
-     const DOMAIN = 'nasdotcng.com';
-     const mg = mailgun({
-       apiKey: process.env.MAILGUNKEY,
-       domain: DOMAIN,
-     });
-  let sql = "SELECT * FROM `PI2` ";
+  let sql = 'SELECT * FROM `PI2`';
   let query = db.query(sql, (err, results) => {
     if (err || !results) {
       return res.status(400).json({
@@ -515,32 +510,26 @@ exports.sendEmailToAllMarketParticiapnt = (req, res) => {
       });
     } else {
       for (let val of results) {
-        console.log(val.email);
-
         let subject = req.mail.subject;
         let message = req.mail.message;
         var filePath = req.mail.file.path;
         var fileName = req.mail.file.name;
-          var contentType = req.mail.file.contentType;
+        var contentType = req.mail.file.contentType;
 
         pathToAttachment = `${filePath}`;
         attachment = fs.readFileSync(pathToAttachment).toString('base64');
 
-        const emailData = {
+        const msg = {
           to: `${val.email}`,
           from: 'marketreports@nasdng.com',
           subject: `${subject}`,
           html: `
 <table border="0" align="center" width="100%" cellpadding="0" cellspacing="0" bgcolor="#f9fafc" style="background-color:rgb(249,250,252)">
-
 <tbody><tr style="display:none!important;font-size:1px"><td></td><td></td></tr><tr>
 <td align="center" valign="top">
-
 <table border="0" cellpadding="0" cellspacing="0" width="590" class="m_-61096145151473185templateContainer" style="max-width:590px!important;width:590px">
 <tbody><tr>
-
 <td align="center" valign="top">
-
 <table class="m_-61096145151473185rnb-del-min-width" width="100%" cellpadding="0" border="0" cellspacing="0" style="min-width:590px" name="Layout_0" id="m_-61096145151473185Layout_0">
     <tbody><tr>
         <td class="m_-61096145151473185rnb-del-min-width" valign="top" align="center" style="min-width:590px">
@@ -556,9 +545,7 @@ exports.sendEmailToAllMarketParticiapnt = (req, res) => {
 </tbody></table>
 </td>
 </tr><tr>
-
 <td align="center" valign="top">
-
 <div style="background-color:rgb(255,255,255);border-radius:0px">
     
     
@@ -594,17 +581,12 @@ exports.sendEmailToAllMarketParticiapnt = (req, res) => {
         </td>
     </tr>
 </tbody></table>
-
     
     
-
 </div></td>
 </tr><tr>
-
 <td align="center" valign="top">
-
 <div style="background-color:rgb(255,255,255);border-radius:0px">
-
     
     
     
@@ -612,33 +594,25 @@ exports.sendEmailToAllMarketParticiapnt = (req, res) => {
     <tbody><tr>
         <td class="m_-61096145151473185rnb-del-min-width" align="center" valign="top">
             <table width="100%" border="0" cellpadding="0" cellspacing="0" class="m_-61096145151473185rnb-container" bgcolor="#ffffff" style="background-color:rgb(255,255,255);padding-left:20px;padding-right:20px;border-collapse:separate;border-radius:0px;border-bottom:0px none rgb(200,200,200)">
-
                             <tbody><tr>
                                 <td height="20" style="font-size:1px;line-height:0px">&nbsp;</td>
                             </tr>
                             <tr>
                                 <td valign="top" align="left">
-
                                     <table width="100%" border="0" cellpadding="0" cellspacing="0">
                                         <tbody><tr>
                                             <th class="m_-61096145151473185rnb-force-col" style="text-align:left;font-weight:normal;padding-right:0px" valign="top">
-
                                                 <table border="0" valign="top" cellspacing="0" cellpadding="0" width="100%" align="left" class="m_-61096145151473185rnb-col-1">
-
                                                     <tbody><tr>
                                                         <td class="m_-61096145151473185content-spacing" style="font-size:14px;font-family:Arial,Helvetica,sans-serif,sans-serif;color:#3c4858;line-height:21px">
                                                         <div>
-
-
                                                               <div>
                                                          
                                                            ${message}
-
                                                         </div>
 </td>
                                                     </tr>
                                                     </tbody></table>
-
                                                 </th></tr>
                                     </tbody></table></td>
                             </tr>
@@ -651,12 +625,9 @@ exports.sendEmailToAllMarketParticiapnt = (req, res) => {
 </tbody></table>
     
     
-
 </div></td>
 </tr><tr>
-
 <td align="center" valign="top">
-
 <div style="background-color:rgb(249,250,252)">
     
     <table class="m_-61096145151473185rnb-del-min-width m_-61096145151473185rnb-tmpl-width" width="100%" cellpadding="0" border="0" cellspacing="0" style="min-width:590px" name="Layout_5" id="m_-61096145151473185Layout_5">
@@ -668,20 +639,16 @@ exports.sendEmailToAllMarketParticiapnt = (req, res) => {
                     </tr>
                     <tr>
                         <td valign="top" style="font-size:14px;font-family:Arial,Helvetica,sans-serif;color:#888888" align="left">
-
                             <table width="100%" border="0" cellpadding="0" cellspacing="0">
                                 <tbody><tr>
                                     <th class="m_-61096145151473185rnb-force-col" style="padding-right:20px;padding-left:20px;font-weight:normal" valign="top">
-
                                         <table border="0" valign="top" cellspacing="0" cellpadding="0" width="264" align="left" class="m_-61096145151473185rnb-col-2 m_-61096145151473185rnb-social-text-left" style="border-bottom:0">
-
                                             <tbody><tr>
                                                 <td valign="top">
                                                     <table cellpadding="0" border="0" align="left" cellspacing="0" class="m_-61096145151473185rnb-btn-col-content">
                                                         <tbody><tr>
                                                             <td valign="middle" align="left" style="font-size:14px;font-family:Arial,Helvetica,sans-serif;color:#888888;line-height:16px" class="m_-61096145151473185rnb-text-center">
                                                                 <div><div><strong>NASD PLC</strong>,</div>
-
 <div>9th Floor, UBA House,
 57 Marina, Lagos State,
 Nigeria<br>
@@ -693,9 +660,7 @@ Nigeria<br>
                                             </tr>
                                             </tbody></table>
                                         </th><th class="m_-61096145151473185rnb-force-col m_-61096145151473185rnb-social-width" valign="top" style="padding-right:15px">
-
                                         <table border="0" valign="top" cellspacing="0" cellpadding="0" width="246" align="right" class="m_-61096145151473185rnb-last-col-2">
-
                                             <tbody><tr>
                                                 <td valign="top">
                                                     <table cellpadding="0" border="0" cellspacing="0" class="m_-61096145151473185rnb-social-align" style="float:right" align="right">
@@ -749,15 +714,12 @@ Nigeria<br>
                         <td height="20" style="font-size:1px;line-height:0px">&nbsp;</td>
                     </tr>
                 </tbody></table>
-
             </td>
         </tr></tbody></table>
     
 </div></td>
 </tr><tr>
-
 <td align="center" valign="top">
-
 <table class="m_-61096145151473185rnb-del-min-width" width="100%" cellpadding="0" border="0" cellspacing="0" style="min-width:590px" name="Layout_" id="m_-61096145151473185Layout_">
     <tbody><tr>
         <td class="m_-61096145151473185rnb-del-min-width" valign="top" align="center" style="min-width:590px">
@@ -773,9 +735,7 @@ Nigeria<br>
 </tbody></table>
 </td>
 </tr><tr>
-
 <td align="center" valign="top">
-
 <div style="background-color:rgb(249,250,252)">
     
     <table class="m_-61096145151473185rnb-del-min-width m_-61096145151473185rnb-tmpl-width" width="100%" cellpadding="0" border="0" cellspacing="0" style="min-width:590px" name="Layout_3" id="m_-61096145151473185Layout_3">
@@ -789,7 +749,6 @@ Nigeria<br>
                         <td>
                             <div style="font-size:14px;color:#888888;font-weight:normal;text-align:center;font-family:Arial,Helvetica,sans-serif"><div>This email was sent to <a href="${val.email}" target="_blank">${val.email}</a>
 <div>You received this email because you are registered with NASD Plc</div>
-
 <div>&nbsp;</div>
 </div>
 </div>
@@ -807,9 +766,7 @@ Nigeria<br>
     
 </div></td>
 </tr><tr>
-
 <td align="center" valign="top">
-
 <div style="background-color:rgb(249,250,252)">
     
     <table class="m_-61096145151473185rnb-del-min-width m_-61096145151473185rnb-tmpl-width" width="100%" cellpadding="0" border="0" cellspacing="0" style="min-width:590px" name="Layout_4" id="m_-61096145151473185Layout_4">
@@ -829,7 +786,6 @@ Nigeria<br>
     
 </div></td>
 </tr></tbody></table>
-
             </td>
 </tr>
 </tbody></table>
@@ -843,9 +799,14 @@ Nigeria<br>
             },
           ],
         };
-         mg.messages().send(emailData, function (error, body) {
-           console.log(body);
-         });
+        sgMail
+          .send(msg)
+          .then(() => {
+            console.log('Email sent');
+          })
+          .catch((error) => {
+            console.error(error);
+          });
       }
 
       return res.json(results);
@@ -854,6 +815,8 @@ Nigeria<br>
 };
 
 exports.sendEmailToNasdParticipant = (req, res) => {
+  const sgMail = require('@sendgrid/mail');
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
   let sql = "SELECT * FROM `pi`";
   let query = db.query(sql, (err, results) => {
     if (err || !results) {
@@ -862,25 +825,22 @@ exports.sendEmailToNasdParticipant = (req, res) => {
       });
     } else {
       for (let val of results) {
-          console.log(val.email);
-          
-        
+        console.log(val.email);
+
         let subject = req.mail.subject;
         let message = req.mail.message;
         var filePath = req.mail.file.path;
+        var link = req.mail.link;
+
         var fileName = req.mail.file.name;
-          var contentType = req.mail.file.contentType;
+        var contentType = req.mail.file.contentType;
 
-
-        //   var filepath = path.join(__dirname, fileName);
-          var file = fs.readFileSync(filePath);
- 
-        var attch = new mg.Attachment({ data: file, filename: fileName });
-          
+        pathToAttachment = `${filePath}`;
+        attachment = fs.readFileSync(pathToAttachment).toString('base64');
 
         const emailData = {
           to: `${val.email}`,
-          from: 'marketreports@nasdng.com',
+          from: 'marketoperations@nasdng.com', // Change to your verified sender
           subject: `${subject}`,
           html: `
   <table border="0" align="center" width="100%" cellpadding="0" cellspacing="0" bgcolor="#f9fafc" style="background-color:rgb(249,250,252)">
@@ -931,8 +891,8 @@ exports.sendEmailToNasdParticipant = (req, res) => {
                                       <table cellpadding="0" border="0" align="left" cellspacing="0" class="m_-61096145151473185logo-img-center"> 
                                           <tbody><tr>
                                               <td valign="middle" align="center" style="line-height:1px">
-                                              <div style="border-top:0px None #000;border-right:0px None #000;border-bottom:0px None #000;border-left:0px None #000;display:inline-block" cellspacing="0" cellpadding="0" border="0"><div><a style="text-decoration:none" href="http://47c9c.r.ag.d.sendibm3.com/mk/cl/f/3Yldga7Mc95aruzbZjqaZ1qVfb5YXGb402yuKwjWcATAg9nub1rMK9xArYt1I4lfa2HlhWDg49-DIDaaXjgbCqfWeeZucOsC1OxlElWwEgwvzoDyb-lfPIcPrnfLzq4ZJtJLSPWUWBGxe1Gr9COg62LWEEY" target="_blank" data-saferedirecturl="https://www.google.com/url?q=http://47c9c.r.ag.d.sendibm3.com/mk/cl/f/3Yldga7Mc95aruzbZjqaZ1qVfb5YXGb402yuKwjWcATAg9nub1rMK9xArYt1I4lfa2HlhWDg49-DIDaaXjgbCqfWeeZucOsC1OxlElWwEgwvzoDyb-lfPIcPrnfLzq4ZJtJLSPWUWBGxe1Gr9COg62LWEEY&amp;source=gmail&amp;ust=1583929089887000&amp;usg=AFQjCNF-GoLXZyWZ49Ey0zTpRl-KPVSghA"></a></div>
-                                              </div></td>
+                                                  <div style="border-top:0px None #000;border-right:0px None #000;border-bottom:0px None #000;border-left:0px None #000;display:inline-block" cellspacing="0" cellpadding="0" border="0"><div><a style="text-decoration:none" href="http://47c9c.r.ag.d.sendibm3.com/mk/cl/f/3Yldga7Mc95aruzbZjqaZ1qVfb5YXGb402yuKwjWcATAg9nub1rMK9xArYt1I4lfa2HlhWDg49-DIDaaXjgbCqfWeeZucOsC1OxlElWwEgwvzoDyb-lfPIcPrnfLzq4ZJtJLSPWUWBGxe1Gr9COg62LWEEY" target="_blank" data-saferedirecturl="https://www.google.com/url?q=http://47c9c.r.ag.d.sendibm3.com/mk/cl/f/3Yldga7Mc95aruzbZjqaZ1qVfb5YXGb402yuKwjWcATAg9nub1rMK9xArYt1I4lfa2HlhWDg49-DIDaaXjgbCqfWeeZucOsC1OxlElWwEgwvzoDyb-lfPIcPrnfLzq4ZJtJLSPWUWBGxe1Gr9COg62LWEEY&amp;source=gmail&amp;ust=1583929089887000&amp;usg=AFQjCNF-GoLXZyWZ49Ey0zTpRl-KPVSghA"></a></div>
+                                                  </div></td>
                                           </tr>
                                       </tbody></table>
                                       </td>
@@ -946,8 +906,6 @@ exports.sendEmailToNasdParticipant = (req, res) => {
           </td>
       </tr>
   </tbody></table>
-
-
   
       
       
@@ -956,9 +914,7 @@ exports.sendEmailToNasdParticipant = (req, res) => {
   </tr>
   
   <tr>
-
   <td align="center" valign="top">
-
       <div style="background-color:rgb(255,255,255)">
           
           
@@ -974,11 +930,10 @@ exports.sendEmailToNasdParticipant = (req, res) => {
                                   <tbody><tr>
                                       <td>
                                           <div style="display:inherit;border-radius:0px;width:590;max-width:590px!important;border-top:0px None #000;border-right:0px None #000;border-bottom:0px None #000;border-left:0px None #000;border-collapse:separate;border-radius:0px">
-                                              <div><img border="0" hspace="0" vspace="0" width="590" class="m_-5370929821485784635rnb-header-img CToWUd a6T" alt="https://nasdng.com/wp-content/uploads/2020/10/unnamed.png" style="display:block;float:left;border-radius:0px" src="https://nasdng.com/wp-content/uploads/2020/10/unnamed.png" tabindex="0"><div class="a6S" dir="ltr" style="opacity: 0.01; left: 722px; top: 357px;"><div id=":3kh" class="T-I J-J5-Ji aQv T-I-ax7 L3 a5q" role="button" tabindex="0" aria-label="Download attachment " data-tooltip-class="a1V" data-tooltip="Download"><div class="aSK J-J5-Ji aYr"></div></div></div></div><div style="clear:both"></div>
+                                              <div><img border="0" hspace="0" vspace="0" width="590" class="m_-5370929821485784635rnb-header-img CToWUd a6T" alt="IMG" style="display:block;float:left;border-radius:0px" src="${link}" tabindex="0"><div class="a6S" dir="ltr" style="opacity: 0.01; left: 722px; top: 357px;"><div id=":3kh" class="T-I J-J5-Ji aQv T-I-ax7 L3 a5q" role="button" tabindex="0" aria-label="Download attachment " data-tooltip-class="a1V" data-tooltip="Download"><div class="aSK J-J5-Ji aYr"></div></div></div></div><div style="clear:both"></div>
                                               </div></td>
                                   </tr>
                               </tbody></table>
-
                           </td>
                       </tr>
                   </tbody></table>
@@ -1225,15 +1180,41 @@ exports.sendEmailToNasdParticipant = (req, res) => {
   </tr>
   </tbody></table>
   `,
-
-          attachment: attch,
+          attachments: [
+            {
+              filename: fileName,
+              content: attachment,
+              type: contentType,
+              disposition: 'attachment',
+            },
+          ],
         };
-        mg.messages().send(emailData, function (error, body) {
-          console.log(body);
-        });
+        sgMail
+          .send(emailData)
+          .then((sent) => console.log('SENT 2 >>>'))
+          .catch((err) => console.log('ERR 2 >>>', err));
       }
 
       return res.json(results);
     }
   });
+};
+
+exports.createMail = (req, res) => {
+  const emailData = {
+    to: 'afasina@nasdng.com', // admin
+    from: 'noreply@ecommerce.com',
+    subject: `A new order is received`,
+    html: `
+            Hello
+        `,
+  };
+  sgMail
+    .send(emailData)
+    .then((sent) => console.log('SENT >>>', sent))
+    .catch((err) => console.log('ERR >>>', err));
+
+  // email to buyer
+
+  res.json('data');
 };

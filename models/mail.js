@@ -1,26 +1,33 @@
 const mongoose = require('mongoose')
-const mailSchema = new mongoose.Schema({
+const mailSchema = new mongoose.Schema(
+  {
     subject: {
-        type: String,
-        trim: true,
-        required: true,
-        maxlength: 2000
+      type: String,
+      trim: true,
+      required: true,
+      maxlength: 2000,
     },
-   
+
+    link: {
+      type: String,
+      trim: true,
+      required: true,
+      maxlength: 2000,
+    },
+
     message: {
-        type: String,
-        required: true
-     
+      type: String,
+      required: true,
     },
-    
+
     file: {
-        data: Buffer,
-        contentType: String,
-        path:String,
-        name: String
-    }
-    
-}, {timestamps: true}
+      data: Buffer,
+      contentType: String,
+      path: String,
+      name: String,
+    },
+  },
+  { timestamps: true }
 );
 
 

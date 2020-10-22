@@ -227,3 +227,27 @@ exports.companies = (req, res) => {
     }
   });
 };
+
+exports.totalCompaniesVolume = (req, res, next, id) => {
+  let date = '2020-10-21';
+  var dt = datetime.create();
+  var formattedY = dt.format('Y');
+  console.log(formattedY);
+  console.log(id);
+  let sql =
+    'SELECT `SYMBOL`, SUM(`VOLUME`) as VOLUME , SUM(`DEALS`) as DEALS, SUM(VALUE) as VALUE  FROM `market_activity_sheet` WHERE `SYMBOL`=? AND `DATE`>=?';
+  let query = db.query(sql, [id, formattedY], (err, results) => {
+    if (err || !results) {
+      return res.status(400).json({
+        error: 'not found...',
+      });
+    }
+    req.offers = results;
+    next();
+  });
+};
+
+exports.totalVolume = (req, res) => {
+  return res.json(req.offers);
+  next();
+};
