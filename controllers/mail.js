@@ -836,7 +836,7 @@ exports.sendEmailToNasdParticipant = (req, res) => {
         var contentType = req.mail.file.contentType;
 
         pathToAttachment = `${filePath}`;
-        attachment = fs.readFileSync(pathToAttachment).toString('base64');
+          attachment = fs.readFileSync(pathToAttachment).toString('base64');
 
         const emailData = {
           to: `${val.email}`,

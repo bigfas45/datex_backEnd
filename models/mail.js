@@ -11,7 +11,6 @@ const mailSchema = new mongoose.Schema(
     link: {
       type: String,
       trim: true,
-      required: true,
       maxlength: 2000,
     },
 
